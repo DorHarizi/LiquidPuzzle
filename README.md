@@ -98,43 +98,42 @@ The `TubePuzzle` class initializes the puzzle either with a predefined matrix or
 #### `a_star`
 
 ```python
-def a_star(puzzle, verbose=False):
-    """Perform the A* search algorithm with optional verbose output for detailed tracing."""
-    open_set = []
-    heapq.heappush(open_set, (0, puzzle.tubes, [], None))
-    visited = set()
+ def a_star(self):
+        global start_time
+        start_time = time.time()
+        open_list = PriorityQueue()
+        closed_list = {}
+        state_lookup = {}
+        self.fx = (0.10 * self.cur_empty) + (0.30 * self.sum_of_blocks) + (0.40 * self.calculate_misplaced_units()) + (
+                    0.20 * self.calculate_fill_level_difference())
+        open_list.put(self.fx, self)
+        state_lookup[self.key] = self
+        while not open_list.empty():
+            current_state_fx, current_state = open_list.get()
+            assert isinstance(current_state, ColorSortPuzzle)
+            if current_state.key in state_lookup:
+                state_lookup.pop(current_state.key)
 
-    while open_set:
-        _, current_state, path, last_move = heapq.heappop(open_set)
+            if current_state.is_goal():
+                print("\n-----------------------------------------------------------")
+                print("Goal State Reached!")
+                print(f"{current_state.log_game}")
+                return current_state.num_of_state
 
-        if tuple(map(tuple, current_state)) in visited:
-            continue
-        visited.add(tuple(map(tuple, current_state)))
+            closed_list[current_state.key] = current_state
+            current_state.generate_moves()
+            for operator in current_state.operators:
+                child_state = copy.deepcopy(current_state)
+                child_state.move(operator[0], operator[1])
+                if child_state.key not in closed_list and child_state.key not in state_lookup:
+                    open_list.put(child_state.fx, child_state)
+                    state_lookup[child_state.key] = child_state
+                elif child_state.key in state_lookup:
+                    if state_lookup[child_state.key].fx > child_state.fx:
+                        state_lookup[child_state.key] = child_state
+                        open_list.put(child_state.fx, child_state)
+        return -1
 
-        if puzzle.is_goal():
-            if verbose:
-                print("Goal Reached!")
-            return path
-
-        moves = puzzle.find_moves()
-        if not moves and verbose:
-            print("No available moves. Stuck state reached.")
-
-        for move in moves:
-            if last_move and move == (last_move[1], last_move[0]):
-                continue
-
-            new_state = [list(tube) for tube in current_state]
-            color = new_state[move[0]].pop()
-            new_state[move[1]].append(color)
-            new_path = path + [move]
-            score = len(new_path) + heuristic(new_state, puzzle.tube_capacity)
-            heapq.heappush(open_set, (score, new_state, new_path, move))
-
-            if verbose:
-                print(f"Move from Tube {move[0] + 1} to Tube {move[1] + 1} considered. New state:")
-                for idx, tube in enumerate(new_state):
-                    print(f"Tube {idx + 1}: {tube}")
 
 
 def generate_random_initial_matrix(num_tubes, tube_capacity, max_color):
