@@ -13,7 +13,7 @@ This project implements a solver for the Tube Puzzle using the A* search algorit
 
 ## Project Structure
 
-- `main.py`: The main implementation of the Tube Puzzle and the A* search algorithm.
+- `LiquidPuzzle.py`: The main implementation of the Tube Puzzle and the A* search algorithm.
 - `README.md`: This file.
 
 ## How to Run
@@ -21,7 +21,7 @@ This project implements a solver for the Tube Puzzle using the A* search algorit
 To run the simulation and see the output, use the following command:
 
 ```bash
-python main.py
+python LiquidPuzzle.py
 ```
 
 ## Dependencies
@@ -133,49 +133,7 @@ The `TubePuzzle` class initializes the puzzle either with a predefined matrix or
                         state_lookup[child_state.key] = child_state
                         open_list.put(child_state.fx, child_state)
         return -1
-
-
-
-def generate_random_initial_matrix(num_tubes, tube_capacity, max_color):
-    """Generate a random initial matrix for the puzzle with specified parameters."""
-    tubes = []
-    colors = [random.randint(1, max_color) for _ in
-              range(num_tubes * tube_capacity - random.randint(1, num_tubes))]  # Ensure some emptiness
-    random.shuffle(colors)
-    for i in range(0, len(colors), tube_capacity):
-        tubes.append(colors[i:i + tube_capacity])
-    while len(tubes) < num_tubes:
-        tubes.append([])  # Ensure there are empty tubes
-    return tubes
-
-
-def main_simulation():
-    """Run multiple iterations of the puzzle solver with random initial configurations."""
-    num_iterations = 20
-    for i in range(num_iterations):
-        num_tubes = random.randint(5, 10)
-        tube_capacity = random.randint(3, 5)
-        max_color = 5
-        initial_matrix = generate_random_initial_matrix(num_tubes, tube_capacity, max_color)
-        puzzle = TubePuzzle(initial_matrix=initial_matrix)
-        print(f"Initial configuration for iteration {i + 1}:")
-        puzzle.display_tubes()
-        solution = a_star(puzzle, verbose=True)
-        print("Solution Steps:", solution)
-        print("------------------------------------------------------")
-
-
-if __name__ == "__main__":
-    main_simulation()
 ```
-
-## Usage
-
-1. **Initialization**: Create a `TubePuzzle` instance with a predefined matrix or random configuration.
-2. **Heuristic Calculation**: Use the `heuristic` function to estimate the cost.
-3. **A* Algorithm**: Run the `a_star` function to find the solution path.
-4. **Simulation**: Use the `main_simulation` function to run multiple iterations with random configurations.
-
 ## Example
 
 To see the solver in action, run the `main_simulation` function. This will generate random initial configurations and attempt to solve each one, printing the steps and the final solution.
