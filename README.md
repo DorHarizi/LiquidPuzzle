@@ -164,6 +164,30 @@ The results of solving the instances will be saved in `finel_result.xlsx` with t
 - `Steps Number`: The number of steps taken to solve the puzzle.
 - `Runtime (s)`: The time taken to solve the puzzle.
 
+  The results of solving the instances are as follows:
+
+   | Case Number | Steps Number | Runtime (s)   |
+   |-------------|---------------|---------------|
+   | 0           | 5             | 0.000999928   |
+   | 1           | 11            | 0.001015663   |
+   | 2           | 11            | 0.002061844   |
+   | 3           | 21            | 0.003986835   |
+   | 4           | 21            | 0.0072999     |
+   | 5           | 28            | 0.006976843   |
+   | 6           | 31            | 0.008970737   |
+   | 7           | 52            | 0.018982887   |
+   | 8           | 47            | 0.044036388   |
+   | 9           | 59            | 0.025913477   |
+   | 10          | 85            | 0.048085928   |
+   | 11          | 88            | 0.130421877   |
+   | 12          | 331           | 0.487138987   |
+   | 13          | 359           | 3.649609566   |
+   | 14          | 365           | 7.879523277   |
+   | 15          | 2188          | 17.62749267   |
+   | 16          | 2399          | 172.8119066   |
+   | 17          | 2453          | 677.8710749   |
+   | 18          | memory leak   | memory leak   |
+
 ## Detailed Project Description
 
 Refer to `Project_Specifications.pdf` for a detailed description of the project requirements and specifications in Hebrew.
