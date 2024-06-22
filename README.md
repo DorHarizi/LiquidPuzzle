@@ -43,26 +43,57 @@ The `TubePuzzle` class initializes the puzzle either with a predefined matrix or
 #### `heuristic`
 
 ```python
-def heuristic(tubes, tube_capacity):
-    """
-    Calculate a heuristic based on misplaced colors and minimum moves required to sort each tube.
+ def update_move(self):
+        self.num_of_state += 1
+        src, dest = self.src_tube, self.dest_tube
+        self.key = repr(self.containers)
+        self.log_game += f"\n{src} -> {dest}\n"
 
-    Parameters:
-    tubes (list of list of int): The current state of the tubes, where each tube is a list of colors.
-    tube_capacity (int): The maximum number of colors each tube can hold.
+        self.conflicts[src] = len(set(self.containers[src]))
+        self.conflicts[dest] = len(set(self.containers[dest]))
 
-    Returns:
-    int: The heuristic value, which is the maximum of the misplaced colors heuristic and the minimum moves heuristic.
+        if self.containers[src]:
+            color_src = self.containers[src][0]
+            color_counter = 1
+            for i in range(1, len(self.containers[src])):
+                if color_src == self.containers[src][i]:
+                    color_counter += 1
+                else:
+                    break
+            self.top_colors[src] = (color_src, color_counter)
+        else:
+            self.top_colors[src] = -1
 
-    Example:
-    >>> tubes = [[1, 2, 2], [1, 1], [2], [], [2, 2, 2], []]
-    >>> tube_capacity = 3
-    >>> heuristic(tubes, tube_capacity)
-    4
-    """
-    h1 = sum(len(tube) - tube.count(max(set(tube), key=tube.count)) for tube in tubes if len(set(tube)) > 1)
-    h2 = sum((tube_capacity - len(tube)) for tube in tubes if len(set(tube)) == 1)
-    return max(h1, h2)
+        if self.containers[dest]:
+            color_dest = self.containers[dest][0]
+            color_counter = 1
+            for i in range(1, len(self.containers[dest])):
+                if color_dest == self.containers[dest][i]:
+                    color_counter += 1
+                else:
+                    break
+            self.top_colors[dest] = (color_dest, color_counter)
+        else:
+            self.top_colors[dest] = -1
+        self.fill_levels[self.src_tube] = len(self.containers[self.src_tube])
+        self.fill_levels[self.dest_tube] = len(self.containers[self.dest_tube])
+        self.fx = (0.10 * self.cur_empty) + (0.30 * self.sum_of_blocks) + (0.40 * self.calculate_misplaced_units()) + (
+                    0.20 * self.calculate_fill_level_difference())
+
+    def calculate_misplaced_units(self):
+        misplaced_units = 0
+        for tube in self.containers:
+            if len(tube) > 1:
+                tube_set = set(tube)
+                max_count = max(tube.count(color) for color in tube_set)
+                misplaced_units += len(tube) - max_count
+        return misplaced_units
+
+    def calculate_fill_level_difference(self):
+        # Calculate the difference in fill levels between tubes
+        max_fill = max(self.fill_levels)
+        min_fill = min(self.fill_levels)
+        return max_fill - min_fill
 ```
 
 #### `a_star`
