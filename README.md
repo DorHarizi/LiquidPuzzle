@@ -30,9 +30,7 @@ python main.py
 
 ## Explanation of the Algorithm
 
-The A* search algorithm is used to solve the Tube Puzzle. The heuristic function guides the search process by estimating the cost to reach the goal from the current state. The heuristic is the maximum of two values:
-- `h1`: The number of misplaced colors in the tubes.
-- `h2`: The minimum moves required to complete sorting each tube.
+The A* search algorithm is used to solve the Tube Puzzle. The heuristic function guides the search process by estimating the cost to reach the goal from the current state.
 
 ### Key Functions
 
@@ -75,6 +73,7 @@ The `TubePuzzle` class initializes the puzzle either with a predefined matrix or
             self.top_colors[dest] = (color_dest, color_counter)
         else:
             self.top_colors[dest] = -1
+        # Calculate the heuristic value
         self.fill_levels[self.src_tube] = len(self.containers[self.src_tube])
         self.fill_levels[self.dest_tube] = len(self.containers[self.dest_tube])
         self.fx = (0.10 * self.cur_empty) + (0.30 * self.sum_of_blocks) + (0.40 * self.calculate_misplaced_units()) + (
