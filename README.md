@@ -187,10 +187,3 @@ The results of solving the instances will be saved in `finel_result.xlsx` with t
    | 16          | 2399          | 172.8119066   |
    | 17          | 2453          | 677.8710749   |
    | 18          | memory leak   | memory leak   |
-
-## Detailed Project Description
-
-Refer to `Project_Specifications.pdf` for a detailed description of the project requirements and specifications in Hebrew.
-```
-
-This `README.md` file now includes a detailed explanation of the heuristic function used in the A* algorithm.
